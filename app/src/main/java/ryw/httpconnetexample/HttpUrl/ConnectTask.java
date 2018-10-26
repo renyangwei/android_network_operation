@@ -8,10 +8,10 @@ import android.os.AsyncTask;
  * Integer: 进度
  * Long：返回值
  */
-public class ConnectTask extends AsyncTask<Void, Integer, Long> {
+public class ConnectTask extends AsyncTask<String, Integer, Long> {
 
     @Override
-    protected Long doInBackground(Void... voids) {
+    protected Long doInBackground(String... urls) {
         return null;
     }
 
