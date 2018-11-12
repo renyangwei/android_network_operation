@@ -19,36 +19,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 原生连接
-     * @param view
+     * 原生Get
+     * @param view  视图
      */
-    public void onConnectHttpUrl(View view) {
-        Api.connectBaidu(new ApiResponseListener() {
+    public void onHttpGet(View view) {
+        Api.httpGet("Android Http Get", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 Log.i(Api.TAG, msg);
-                Toast.makeText(getApplicationContext(), "连接成功", Toast.LENGTH_SHORT).show();
+                toast(R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 Log.i(Api.TAG, msg);
-                Toast.makeText(getApplicationContext(), "连接失败", Toast.LENGTH_SHORT).show();
+                toast(msg);
+            }
+        });
+    }
+
+    /**
+     * 原生Post
+     * @param view  视图
+     */
+    public void onHttpPost(View view) {
+        Api.httpPost("Android Http Post", new ApiResponseListener() {
+            @Override
+            public void onSuccess(String msg) {
+                Log.i(Api.TAG, msg);
+                toast(R.string.response_success);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                Log.i(Api.TAG, msg);
+                toast(msg);
             }
         });
     }
 
     /**
      * volley连接
-     * @param view
+     * @param view  视图
      */
     public void onConnectVolley(View view) {
     }
 
     /**
      * OkHttp连接
-     * @param view
+     * @param view  视图
      */
     public void onConnectOkHttp(View view) {
+    }
+
+    private void toast(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void toast(int id) {
+        Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
     }
 }

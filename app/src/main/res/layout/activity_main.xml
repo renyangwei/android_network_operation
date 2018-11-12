@@ -7,7 +7,7 @@
     tools:context=".Activity.MainActivity">
 
     <Button
-        android:id="@+id/bnt_connect_http_url"
+        android:id="@+id/bnt_http_get"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -15,11 +15,26 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/connect_by_http_url"
+        android:onClick="onHttpGet"
+        android:text="@string/http_get"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onConnectHttpUrl"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_http_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/http_post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bnt_http_get"
+        android:onClick="onHttpPost"/>
 
     <Button
         android:id="@+id/bnt_connect_volley"
@@ -30,11 +45,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="onConnectVolley"
         android:text="@string/connect_by_volley"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bnt_connect_http_url"
-        android:onClick="onConnectVolley"/>
+        app:layout_constraintTop_toBottomOf="@+id/btn_http_post" />
 
     <Button
         android:id="@+id/bnt_connect_ok_http"
@@ -45,9 +60,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="onConnectOkHttp"
         android:text="@string/connect_by_ok_http"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bnt_connect_volley"
-        android:onClick="onConnectOkHttp"/>
+        app:layout_constraintTop_toBottomOf="@+id/bnt_connect_volley" />
+
 </android.support.constraint.ConstraintLayout>

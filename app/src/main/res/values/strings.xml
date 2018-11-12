@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">HttpConnetExample</string>
-    <string name="connect_by_http_url">原生连接</string>
+    <string name="http_get">原生Get</string>
     <string name="connect_by_volley">volley连接</string>
     <string name="connect_by_ok_http">OkHttp连接</string>
+    <string name="http_post">原生Post</string>
+    <string name="response_success">响应成功</string>
+    <string name="response_failed">响应失败</string>
 </resources>
