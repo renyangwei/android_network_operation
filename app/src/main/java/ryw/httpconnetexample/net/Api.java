@@ -1,15 +1,15 @@
-package ryw.httpconnetexample.HttpUrl;
+package ryw.httpconnetexample.net;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Api {
 
-    public static final String TAG = "Example";
-    private static final String BAIDU = "http://172.17.100.2:8080";//夜神模拟器访问本机的地址映射
+    private static final String BAIDU = "http://172.17.100.2:8082";//夜神模拟器访问本机的地址映射
 
     /**
      * 原生Get
@@ -71,6 +71,30 @@ public class Api {
                 }
             }
         }.execute(body);
+    }
+
+    /**
+     * 上传文件
+     * @param fileName  文件路径
+     * @param listener  回调监听
+     */
+    public static void httpUploadFile(String fileName, InputStream inputStream, final ApiResponseListener listener) {
+        new AsyncTask<Object, Void, String>() {
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (TextUtils.isEmpty(s)) {
+                    listener.onFailed("upload file failed");
+                } else {
+                    listener.onSuccess(s);
+                }
+            }
+
+            @Override
+            protected String doInBackground(Object... objects) {
+                return Http.uploadFile(BAIDU, (String)objects[0], (InputStream)objects[1]);
+            }
+        }.execute(fileName, inputStream);
     }
 
 }

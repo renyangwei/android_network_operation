@@ -1,10 +1,10 @@
-package ryw.httpconnetexample.HttpUrl;
-
-import android.util.Log;
+package ryw.httpconnetexample.net;
 
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Set;
+
+import ryw.httpconnetexample.log.LogUtil;
 
 public class HttpUtil {
 
@@ -28,14 +28,14 @@ public class HttpUtil {
         }
         String urlParams = sb.substring(0, sb.length() - 1);
         if (urlPath.length() == 0) {
-            Log.i(Api.TAG, "buildUrlOrParams = " + urlParams);
+            LogUtil.i("buildUrlOrParams = " + urlParams);
             return urlParams;
         } else {
             if (!urlPath.endsWith("?")) {
                 urlPath += "?";
             }
             String urlString = urlPath + urlParams;
-            Log.i(Api.TAG, "buildUrlOrParams = " + urlString);
+            LogUtil.i("buildUrlOrParams = " + urlString);
             return urlString;
         }
     }
