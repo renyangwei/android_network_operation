@@ -20,12 +20,23 @@ import ryw.httpconnetexample.log.LogUtil;
 
 public class Http {
 
+    private static Http instance;
+
+    private Http(){}
+
+    public static Http getInstance() {
+        if (instance == null) {
+            instance = new Http();
+        }
+        return instance;
+    }
+
     /**
      * Http Get
      * @param host  地址
      * @return  Http响应
      */
-    public static String get(String host) {
+    public String get(String host) {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(host);
@@ -63,7 +74,7 @@ public class Http {
      * @param url           地址
      * @param body          请求主体
      */
-    public static String postUrlencoded(String url, String body) {
+    public String postUrlencoded(String url, String body) {
         HttpURLConnection connection = null;
         try {
             URL mUrl = new URL(url);
@@ -112,7 +123,7 @@ public class Http {
      * @param mUrl 地址
      * @param fileName  文件路径
      */
-    public static String uploadFile(String mUrl, String fileName, InputStream inputStream) {
+    public String uploadFile(String mUrl, String fileName, InputStream inputStream) {
         HttpURLConnection conn = null;
         /// boundary就是request头和上传文件内容的分隔符(可自定义任意一组字符串)
         String BOUNDARY = "******";

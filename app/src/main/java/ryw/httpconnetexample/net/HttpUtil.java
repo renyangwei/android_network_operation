@@ -10,7 +10,7 @@ public class HttpUtil {
 
     /**
      * 获取url地址或者参数
-     * @param urlPath   地址，可以为""
+     * @param urlPath   地址，如果为""就只拼接参数
      * @param params    参数
      * @return          发起请求的参数
      */
