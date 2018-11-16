@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">HttpConnetExample</string>
     <string name="http_get">原生Get</string>
-    <string name="connect_by_volley">volley连接</string>
+    <string name="volley_get">volley Get</string>
+    <string name="volley_post">volley Post</string>
     <string name="connect_by_ok_http">OkHttp连接</string>
     <string name="http_post">原生Post</string>
     <string name="response_success">响应成功</string>

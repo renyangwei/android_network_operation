@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onHttpGet(View view) {
-        Api.getInstance().httpGet("Android Http Get", new ApiResponseListener() {
+        Api.getInstance(this).httpGet("Android Http Get", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onHttpPost(View view) {
-        Api.getInstance().httpPost("Android Http Post", new ApiResponseListener() {
+        Api.getInstance(this).httpPost("Android Http Post", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Api.getInstance().httpUploadFile(getApplicationContext(), fileName, new ApiFileResponseListener() {
+        Api.getInstance(this).httpUploadFile(fileName, new ApiFileResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
@@ -93,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * volley连接
+     * volley Get
      * @param view  视图
      */
     public void onVolleyGet(View view) {
-        Api.getInstance().volleyGet(this, "ren", new ApiResponseListener() {
+        Api.getInstance(this).volleyGet("ren", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
@@ -114,10 +114,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * OkHttp连接
+     * Volley Post
      * @param view  视图
      */
-    public void onConnectOkHttp(View view) {
+    public void onVolleyPost(View view) {
+        Api.getInstance(this).volleyPost("volleyPost", new ApiResponseListener() {
+            @Override
+            public void onSuccess(String msg) {
+                LogUtil.i(msg);
+                toast(R.string.response_success);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                LogUtil.i(msg);
+                toast(msg);
+            }
+        });
     }
 
     private void toast(String msg) {

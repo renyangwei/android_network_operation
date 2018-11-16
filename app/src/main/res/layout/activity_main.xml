@@ -46,13 +46,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="onVolleyGet"
-        android:text="@string/connect_by_volley"
+        android:text="@string/volley_get"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_http_post" />
 
     <Button
-        android:id="@+id/bnt_connect_ok_http"
+        android:id="@+id/bnt_volley_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -60,8 +60,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="onConnectOkHttp"
-        android:text="@string/connect_by_ok_http"
+        android:onClick="onVolleyPost"
+        android:text="@string/volley_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"

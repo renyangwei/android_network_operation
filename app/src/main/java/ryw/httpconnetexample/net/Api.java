@@ -17,18 +17,25 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import ryw.httpconnetexample.volley.VolleySingleton;
+
 /**
  * API类，给Activity提供接口
  */
 public class Api {
 
-    private static final String BAIDU = "http://172.17.100.2:8082";//夜神模拟器访问本机的地址映射
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
 
+    private static final String LOCALHOST = "http://172.17.100.2:8082";//夜神模拟器访问本机的地址映射
+
+    @SuppressLint("StaticFieldLeak")
     private static Api instance;
 
     private Api() {}
 
-    public static Api getInstance() {
+    public static Api getInstance(Context context) {
+        mContext = context;
         if (instance == null) {
             instance = new Api();
         }
@@ -45,7 +52,7 @@ public class Api {
         //组装参数name
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        final String baiduUrl = HttpUtil.buildUrlOrParams(BAIDU, map);
+        final String baiduUrl = HttpUtil.buildUrlOrParams(LOCALHOST, map);
         /*
           实现异步操作类AsyncTask
           参数一：传入的参数
@@ -85,7 +92,7 @@ public class Api {
 
             @Override
             protected String doInBackground(String... strings) {
-                return Http.getInstance().postUrlencoded(BAIDU, strings[0]);
+                return Http.getInstance().postUrlencoded(LOCALHOST, strings[0]);
             }
 
             @Override
@@ -105,10 +112,10 @@ public class Api {
      * @param listener  回调监听
      */
     @SuppressLint("StaticFieldLeak")
-    public void httpUploadFile(Context context, String fileName, final ApiFileResponseListener listener) {
+    public void httpUploadFile(String fileName, final ApiFileResponseListener listener) {
         InputStream inputStream = null;
         try {
-            inputStream = context.getAssets().open(fileName);
+            inputStream = mContext.getAssets().open(fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,23 +139,22 @@ public class Api {
             @Override
             protected String doInBackground(Object... objects) {
                 publishProgress("100%");
-                return Http.getInstance().uploadFile(BAIDU, (String)objects[0], (InputStream)objects[1]);
+                return Http.getInstance().uploadFile(LOCALHOST, (String)objects[0], (InputStream)objects[1]);
             }
         }.execute(fileName, inputStream);
     }
 
     /**
      * Voley Get
-     * @param context   上下文
      * @param name      参数
      * @param listener  回调监听
      */
-    public void volleyGet(Context context,String name, final ApiResponseListener listener) {
+    public void volleyGet(String name, final ApiResponseListener listener) {
         //组装参数name
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        final String baiduUrl = HttpUtil.buildUrlOrParams(BAIDU, map);
-        RequestQueue queue = Volley.newRequestQueue(context);
+        final String baiduUrl = HttpUtil.buildUrlOrParams(LOCALHOST, map);
+        RequestQueue queue = Volley.newRequestQueue(mContext);
         StringRequest request = new StringRequest(Request.Method.GET, baiduUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -161,6 +167,34 @@ public class Api {
             }
         });
         queue.add(request);
+    }
+
+    /**
+     * Volley Post
+     * @param name      参数
+     * @param listener  回调
+     */
+    public void volleyPost(String name, final ApiResponseListener listener) {
+        //组装参数name
+        final Map<String, String> map = new HashMap<>();
+        map.put("name", name);
+        StringRequest request = new StringRequest(Request.Method.POST, LOCALHOST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listener.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onFailed(error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                return map;
+            }
+        };
+        VolleySingleton.getInstance(mContext).addToRequestQueue(request);
     }
 
 }
