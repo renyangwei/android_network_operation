@@ -1,6 +1,5 @@
-package ryw.httpconnetexample.net;
+package ryw.httpconnetexample.api;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -17,6 +16,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
+import ryw.httpconnetexample.net.Http;
 import ryw.httpconnetexample.volley.VolleySingleton;
 
 /**
@@ -24,35 +25,20 @@ import ryw.httpconnetexample.volley.VolleySingleton;
  */
 public class Api {
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context mContext;
-
     private static final String LOCALHOST = "http://172.17.100.2:8082";//夜神模拟器访问本机的地址映射
 
-    @SuppressLint("StaticFieldLeak")
-    private static Api instance;
-
     private Api() {}
-
-    public static Api getInstance(Context context) {
-        mContext = context;
-        if (instance == null) {
-            instance = new Api();
-        }
-        return instance;
-    }
 
     /**
      * 原生Get
      * @param name      参数Name
      * @param listener  回调监听
      */
-    @SuppressLint("StaticFieldLeak")
-    public void httpGet(String name, final ApiResponseListener listener) {
+    public static void httpGet(String name, final ApiResponseListener listener) {
         //组装参数name
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        final String baiduUrl = HttpUtil.buildUrlOrParams(LOCALHOST, map);
+        final String baiduUrl = Http.buildUrlOrParams(LOCALHOST, map);
         /*
           实现异步操作类AsyncTask
           参数一：传入的参数
@@ -72,7 +58,7 @@ public class Api {
 
             @Override
             protected String doInBackground(String... strings) {
-                return Http.getInstance().get(strings[0]);
+                return Http.get(strings[0]);
             }
         }.execute(baiduUrl);
     }
@@ -82,17 +68,16 @@ public class Api {
      * @param name      参数Name
      * @param listener  回调监听
      */
-    @SuppressLint("StaticFieldLeak")
-    public void httpPost(String name, final ApiResponseListener listener) {
+    public static void httpPost(String name, final ApiResponseListener listener) {
         //组装参数name
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        final String body = HttpUtil.buildUrlOrParams("", map);
+        final String body = Http.buildUrlOrParams("", map);
         new AsyncTask<String, Void, String>() {
 
             @Override
             protected String doInBackground(String... strings) {
-                return Http.getInstance().postUrlencoded(LOCALHOST, strings[0]);
+                return Http.postUrlencoded(LOCALHOST, strings[0]);
             }
 
             @Override
@@ -111,11 +96,10 @@ public class Api {
      * @param fileName  文件路径
      * @param listener  回调监听
      */
-    @SuppressLint("StaticFieldLeak")
-    public void httpUploadFile(String fileName, final ApiFileResponseListener listener) {
+    public static void httpUploadFile(Context context, String fileName, final ApiFileResponseListener listener) {
         InputStream inputStream = null;
         try {
-            inputStream = mContext.getAssets().open(fileName);
+            inputStream = context.getAssets().open(fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,7 +123,7 @@ public class Api {
             @Override
             protected String doInBackground(Object... objects) {
                 publishProgress("100%");
-                return Http.getInstance().uploadFile(LOCALHOST, (String)objects[0], (InputStream)objects[1]);
+                return Http.uploadFile(LOCALHOST, (String)objects[0], (InputStream)objects[1]);
             }
         }.execute(fileName, inputStream);
     }
@@ -149,12 +133,12 @@ public class Api {
      * @param name      参数
      * @param listener  回调监听
      */
-    public void volleyGet(String name, final ApiResponseListener listener) {
+    public static void volleyGet(Context context, String name, final ApiResponseListener listener) {
         //组装参数name
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        final String baiduUrl = HttpUtil.buildUrlOrParams(LOCALHOST, map);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
+        final String baiduUrl = Http.buildUrlOrParams(LOCALHOST, map);
+        RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, baiduUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -174,7 +158,7 @@ public class Api {
      * @param name      参数
      * @param listener  回调
      */
-    public void volleyPost(String name, final ApiResponseListener listener) {
+    public static void volleyPost(Context context, String name, final ApiResponseListener listener) {
         //组装参数name
         final Map<String, String> map = new HashMap<>();
         map.put("name", name);
@@ -194,7 +178,26 @@ public class Api {
                 return map;
             }
         };
-        VolleySingleton.getInstance(mContext).addToRequestQueue(request);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public static void okhttpGet(String name, ApiResponseListener listener) {
+        //组装参数name
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        final String baiduUrl = Http.buildUrlOrParams(LOCALHOST, map);
+        OkHttpClient client = new OkHttpClient();
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(baiduUrl)
+                .build();
+        try {
+            okhttp3.Response response = client.newCall(request).execute();
+            listener.onSuccess(response.body().string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            listener.onFailed("okhttp get failed");
+        }
     }
 
 }

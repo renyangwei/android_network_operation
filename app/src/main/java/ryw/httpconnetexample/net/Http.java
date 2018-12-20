@@ -13,30 +13,24 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import ryw.httpconnetexample.log.LogUtil;
+import ryw.httpconnetexample.utils.LogUtil;
 
 public class Http {
 
-    private static Http instance;
-
     private Http(){}
-
-    public static Http getInstance() {
-        if (instance == null) {
-            instance = new Http();
-        }
-        return instance;
-    }
 
     /**
      * Http Get
      * @param host  地址
      * @return  Http响应
      */
-    public String get(String host) {
+    public static String get(String host) {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(host);
@@ -74,7 +68,7 @@ public class Http {
      * @param url           地址
      * @param body          请求主体
      */
-    public String postUrlencoded(String url, String body) {
+    public static String postUrlencoded(String url, String body) {
         HttpURLConnection connection = null;
         try {
             URL mUrl = new URL(url);
@@ -123,7 +117,7 @@ public class Http {
      * @param mUrl 地址
      * @param fileName  文件路径
      */
-    public String uploadFile(String mUrl, String fileName, InputStream inputStream) {
+    public static String uploadFile(String mUrl, String fileName, InputStream inputStream) {
         HttpURLConnection conn = null;
         /// boundary就是request头和上传文件内容的分隔符(可自定义任意一组字符串)
         String BOUNDARY = "******";
@@ -212,4 +206,35 @@ public class Http {
         return "";
     }
 
+    /**
+     * 获取url地址或者参数
+     * @param urlPath   地址，如果为""就只拼接参数
+     * @param params    参数
+     * @return          发起请求的参数
+     */
+    public static String buildUrlOrParams(String urlPath, Map<String, Object> params) {
+        if (urlPath == null || params == null || params.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        Set<String> keys = params.keySet();
+        for (String key : keys) {
+            if (params.get(key) == null) {
+                continue;
+            }
+            sb = sb.append(key).append("=").append(URLEncoder.encode(params.get(key).toString())).append("&");
+        }
+        String urlParams = sb.substring(0, sb.length() - 1);
+        if (urlPath.length() == 0) {
+            LogUtil.i("buildUrlOrParams = " + urlParams);
+            return urlParams;
+        } else {
+            if (!urlPath.endsWith("?")) {
+                urlPath += "?";
+            }
+            String urlString = urlPath + urlParams;
+            LogUtil.i("buildUrlOrParams = " + urlString);
+            return urlString;
+        }
+    }
 }

@@ -3,15 +3,15 @@ package ryw.httpconnetexample.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.IOException;
 
 import ryw.httpconnetexample.R;
-import ryw.httpconnetexample.log.LogUtil;
-import ryw.httpconnetexample.net.Api;
-import ryw.httpconnetexample.net.ApiFileResponseListener;
-import ryw.httpconnetexample.net.ApiResponseListener;
+import ryw.httpconnetexample.api.Api;
+import ryw.httpconnetexample.api.ApiFileResponseListener;
+import ryw.httpconnetexample.api.ApiResponseListener;
+import ryw.httpconnetexample.utils.LogUtil;
+import ryw.httpconnetexample.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,17 +26,17 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onHttpGet(View view) {
-        Api.getInstance(this).httpGet("Android Http Get", new ApiResponseListener() {
+        Api.httpGet("Android Http Get", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
-                toast(R.string.response_success);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 LogUtil.i(msg);
-                toast(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
             }
         });
     }
@@ -46,17 +46,17 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onHttpPost(View view) {
-        Api.getInstance(this).httpPost("Android Http Post", new ApiResponseListener() {
+        Api.httpPost("Android Http Post", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
-                toast(R.string.response_success);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 LogUtil.i(msg);
-                toast(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
             }
         });
     }
@@ -72,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Api.getInstance(this).httpUploadFile(fileName, new ApiFileResponseListener() {
+        Api.httpUploadFile(this, fileName, new ApiFileResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
-                toast(R.string.response_success);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 LogUtil.i(msg);
-                toast(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
             }
 
             @Override
@@ -97,17 +97,17 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onVolleyGet(View view) {
-        Api.getInstance(this).volleyGet("ren", new ApiResponseListener() {
+        Api.volleyGet(this, "ren", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
-                toast(R.string.response_success);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 LogUtil.i(msg);
-                toast(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
             }
         });
 
@@ -118,26 +118,40 @@ public class MainActivity extends AppCompatActivity {
      * @param view  视图
      */
     public void onVolleyPost(View view) {
-        Api.getInstance(this).volleyPost("volleyPost", new ApiResponseListener() {
+        Api.volleyPost(this,"volleyPost", new ApiResponseListener() {
             @Override
             public void onSuccess(String msg) {
                 LogUtil.i(msg);
-                toast(R.string.response_success);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
             }
 
             @Override
             public void onFailed(String msg) {
                 LogUtil.i(msg);
-                toast(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
             }
         });
     }
 
-    private void toast(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-    }
+  
 
-    private void toast(int id) {
-        Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+    /**
+     * Okhttp Get
+     * @param view  视图
+     */
+    public void onOkhttpGet(View view) {
+        Api.okhttpGet("okhttp get", new ApiResponseListener() {
+            @Override
+            public void onSuccess(String msg) {
+                LogUtil.i(msg);
+                ToastUtil.toast(getApplicationContext(), R.string.response_success);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                LogUtil.i(msg);
+                ToastUtil.toast(getApplicationContext(), msg);
+            }
+        });
     }
 }

@@ -8,4 +8,6 @@
     <string name="response_success">响应成功</string>
     <string name="response_failed">响应失败</string>
     <string name="http_upload_file">原生上传文件</string>
+    <string name="okhttp_get">Okhttp Get</string>
+    <string name="okhttp_post">Okhttp Post</string>
 </resources>
